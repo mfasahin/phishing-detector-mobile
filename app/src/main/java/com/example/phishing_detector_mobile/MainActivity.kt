@@ -1,0 +1,70 @@
+package com.example.phishing_detector_mobile
+
+import android.graphics.Color
+import android.os.Bundle
+import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.button.MaterialButton
+import com.google.android.material.textfield.TextInputEditText
+
+class MainActivity : AppCompatActivity() {
+
+    private lateinit var classifier: PhishingClassifier
+    private lateinit var urlEditText: TextInputEditText
+    private lateinit var checkButton: MaterialButton
+    private lateinit var resultTextView: TextView
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        // Initialize Classifier
+        classifier = PhishingClassifier(this)
+
+        // Bind Views
+        urlEditText = findViewById(R.id.urlEditText)
+        checkButton = findViewById(R.id.checkButton)
+        resultTextView = findViewById(R.id.resultTextView)
+
+        checkButton.setOnClickListener {
+            val url = urlEditText.text.toString().trim()
+            if (url.isNotEmpty()) {
+                analyzeUrl(url)
+            } else {
+                Toast.makeText(this, "Please enter a URL", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun analyzeUrl(url: String) {
+        val score = classifier.classify(url)
+        
+        // Determine result based on a threshold (e.g., 0.5)
+        // If score is high (close to 1.0), it's likely phishing.
+        // If score is low (close to 0.0), it's likely safe.
+        // Note: Adjust the threshold and logic based on your specific model output.
+
+        if (score == -1f) {
+             resultTextView.text = "Error: ${classifier.lastError}"
+             resultTextView.textSize = 16f
+             resultTextView.setTextColor(Color.WHITE)
+             return
+        }
+
+        val isPhishing = score > 0.5f
+        
+        if (isPhishing) {
+            resultTextView.text = "⚠️ WARNING: PHISHING DETECTED!\nScore: %.2f".format(score)
+            resultTextView.setTextColor(getColor(R.color.errorColor))
+        } else {
+            resultTextView.text = "✅ URL Appears Safe\nScore: %.2f".format(score)
+            resultTextView.setTextColor(getColor(R.color.safeColor))
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        classifier.close()
+    }
+}
