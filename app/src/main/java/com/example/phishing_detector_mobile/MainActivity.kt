@@ -14,6 +14,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var urlEditText: TextInputEditText
     private lateinit var checkButton: MaterialButton
     private lateinit var resultTextView: TextView
+    private lateinit var resultCardView: androidx.cardview.widget.CardView
+    private lateinit var gaugeView: GaugeView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,6 +28,8 @@ class MainActivity : AppCompatActivity() {
         urlEditText = findViewById(R.id.urlEditText)
         checkButton = findViewById(R.id.checkButton)
         resultTextView = findViewById(R.id.resultTextView)
+        resultCardView = findViewById(R.id.resultCardView)
+        gaugeView = findViewById(R.id.gaugeView)
 
         checkButton.setOnClickListener {
             val url = urlEditText.text.toString().trim()
@@ -54,13 +58,30 @@ class MainActivity : AppCompatActivity() {
 
         val isPhishing = score > 0.5f
         
-        if (isPhishing) {
-            resultTextView.text = "⚠️ WARNING: PHISHING DETECTED!\nScore: %.2f".format(score)
-            resultTextView.setTextColor(getColor(R.color.errorColor))
+            if (isPhishing) {
+            resultTextView.text = "⚠️ WARNING: PHISHING DETECTED!"
+            resultTextView.setTextColor(Color.parseColor("#FF5252")) // Neon Red
         } else {
-            resultTextView.text = "✅ URL Appears Safe\nScore: %.2f".format(score)
-            resultTextView.setTextColor(getColor(R.color.safeColor))
+            resultTextView.text = "✅ URL Appears Safe"
+            resultTextView.setTextColor(Color.parseColor("#00E676")) // Neon Green
         }
+        
+        // Update Gauge
+        gaugeView.setScore(score)
+        
+        // Optimize visibility and animation
+        resultCardView.visibility = android.view.View.VISIBLE
+        resultCardView.alpha = 0f
+        resultCardView.scaleX = 0.8f
+        resultCardView.scaleY = 0.8f
+        
+        resultCardView.animate()
+            .alpha(1f)
+            .scaleX(1f)
+            .scaleY(1f)
+            .setDuration(500)
+            .setInterpolator(android.view.animation.OvershootInterpolator())
+            .start()
     }
 
     override fun onDestroy() {
