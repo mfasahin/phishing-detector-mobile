@@ -15,17 +15,17 @@ class GaugeView @JvmOverloads constructor(
 
     private val backgroundPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.STROKE
-        color = Color.parseColor("#333333") // Dark Gray for track
-        strokeWidth = 40f
+        color = Color.parseColor("#222222") // Very Dark Gray for track
+        strokeWidth = 60f
         strokeCap = Paint.Cap.ROUND
     }
 
     private val progressPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.STROKE
         color = Color.parseColor("#4CAF50") // Green default
-        strokeWidth = 40f
+        strokeWidth = 60f
         strokeCap = Paint.Cap.ROUND
-        setShadowLayer(10f, 0f, 0f, Color.parseColor("#4CAF50")) // Neon glow effect
+        setShadowLayer(25f, 0f, 0f, Color.WHITE) // Enhanced White glow effect
     }
 
     private val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
@@ -84,9 +84,10 @@ class GaugeView @JvmOverloads constructor(
         val centerX = w / 2
         val centerY = h / 2
         
-        val scoreText = "%.2f".format(score)
+        val scorePercentage = (score * 100).toInt()
+        val scoreText = "$scorePercentage%"
         canvas.drawText(scoreText, centerX, centerY, textPaint)
         
-        canvas.drawText("Risk Score", centerX, centerY + 60f, labelPaint)
+        canvas.drawText("Risk Skoru", centerX, centerY + 60f, labelPaint)
     }
 }

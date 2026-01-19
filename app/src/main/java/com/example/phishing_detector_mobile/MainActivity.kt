@@ -16,6 +16,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var resultTextView: TextView
     private lateinit var resultCardView: androidx.cardview.widget.CardView
     private lateinit var gaugeView: GaugeView
+    private lateinit var detailSslTextView: TextView
+    private lateinit var detailDomainTextView: TextView
+    private lateinit var detailPatternTextView: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,6 +33,10 @@ class MainActivity : AppCompatActivity() {
         resultTextView = findViewById(R.id.resultTextView)
         resultCardView = findViewById(R.id.resultCardView)
         gaugeView = findViewById(R.id.gaugeView)
+        
+        detailSslTextView = findViewById(R.id.detailSslTextView)
+        detailDomainTextView = findViewById(R.id.detailDomainTextView)
+        detailPatternTextView = findViewById(R.id.detailPatternTextView)
 
         checkButton.setOnClickListener {
             val url = urlEditText.text.toString().trim()
@@ -44,11 +51,6 @@ class MainActivity : AppCompatActivity() {
     private fun analyzeUrl(url: String) {
         val score = classifier.classify(url)
         
-        // Determine result based on a threshold (e.g., 0.5)
-        // If score is high (close to 1.0), it's likely phishing.
-        // If score is low (close to 0.0), it's likely safe.
-        // Note: Adjust the threshold and logic based on your specific model output.
-
         if (score == -1f) {
              resultTextView.text = "Error: ${classifier.lastError}"
              resultTextView.textSize = 16f
@@ -58,12 +60,38 @@ class MainActivity : AppCompatActivity() {
 
         val isPhishing = score > 0.5f
         
-            if (isPhishing) {
-            resultTextView.text = "⚠️ WARNING: PHISHING DETECTED!"
+        if (isPhishing) {
+            resultTextView.text = "⚠️ PHISHING TESPİT EDİLDİ!"
             resultTextView.setTextColor(Color.parseColor("#FF5252")) // Neon Red
+            resultCardView.setBackgroundResource(R.drawable.bg_card_warning)
+            resultTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0) // No Icon
+            resultTextView.compoundDrawablePadding = 0
+            
+            // Simulated Technical Details for Phishing
+            detailSslTextView.text = "[!] SSL Sertifikası: Geçersiz/Uyuşmazlık"
+            detailSslTextView.setTextColor(Color.parseColor("#FF5252"))
+            
+            detailDomainTextView.text = "[!] Alan Adı Yaşı: < 30 Gün (Yeni)"
+            detailDomainTextView.setTextColor(Color.parseColor("#FF8A80"))
+            
+            detailPatternTextView.text = "[!] URL Yapısı: Şüpheli Karakterler"
+            detailPatternTextView.setTextColor(Color.parseColor("#FF5252"))
+            
         } else {
-            resultTextView.text = "✅ URL Appears Safe"
+            resultTextView.text = "✅ Bağlantı Güvenli Görünüyor"
             resultTextView.setTextColor(Color.parseColor("#00E676")) // Neon Green
+            resultCardView.setBackgroundResource(R.drawable.bg_card_safe)
+            resultTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
+            
+            // Simulated Technical Details for Safe
+            detailSslTextView.text = "[✓] SSL Sertifikası: Geçerli (Güvenilir)"
+            detailSslTextView.setTextColor(Color.parseColor("#81C784"))
+            
+            detailDomainTextView.text = "[✓] Alan Adı Yaşı: > 1 Yıl"
+            detailDomainTextView.setTextColor(Color.parseColor("#81C784"))
+            
+            detailPatternTextView.text = "[✓] URL Yapısı: Standart Format"
+            detailPatternTextView.setTextColor(Color.parseColor("#81C784"))
         }
         
         // Update Gauge

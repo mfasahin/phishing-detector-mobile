@@ -8,17 +8,18 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <!-- Modern Phishing Detector Palette -->
-    <color name="primaryColor">#2196F3</color>
-    <color name="primaryDarkColor">#0D47A1</color>
-    <color name="secondaryColor">#00E676</color>
-    <color name="accentColor">#FF4081</color>
-    <color name="backgroundColor">#F5F5F5</color>
-    <color name="surfaceColor">#FFFFFF</color>
+    <!-- Phishing Detector Dark Palette -->
+    <color name="primaryColor">#000000</color>
+    <color name="primaryDarkColor">#000000</color>
+    <color name="secondaryColor">#D32F2F</color>
+    <color name="accentColor">#D32F2F</color>
+    <color name="backgroundColor">#000000</color>
+    <color name="surfaceColor">#121212</color>
     <color name="errorColor">#B00020</color>
     <color name="safeColor">#4CAF50</color>
+    <color name="textColor">#FFFFFF</color>
     
-    <color name="gradient_start">#4c669f</color>
-    <color name="gradient_center">#3b5998</color>
-    <color name="gradient_end">#192f5d</color>
+    <color name="gradient_start">#121212</color>
+    <color name="gradient_center">#1E1E1E</color>
+    <color name="gradient_end">#000000</color>
 </resources>
