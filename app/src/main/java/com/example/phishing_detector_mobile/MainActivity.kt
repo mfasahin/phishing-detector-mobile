@@ -1,6 +1,7 @@
 package com.example.phishing_detector_mobile
 
 import android.graphics.Color
+import android.content.Intent
 import android.os.Bundle
 import android.widget.TextView
 import android.widget.Toast
@@ -44,6 +45,27 @@ class MainActivity : AppCompatActivity() {
                 analyzeUrl(url)
             } else {
                 Toast.makeText(this, "Please enter a URL", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        handleIncomingIntent(intent)
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        handleIncomingIntent(intent)
+    }
+
+    private fun handleIncomingIntent(intent: Intent?) {
+        if (intent?.action == Intent.ACTION_SEND && intent.type == "text/plain") {
+            intent.getStringExtra(Intent.EXTRA_TEXT)?.let { sharedText ->
+                // Basic URL extraction logic (can be improved)
+                val possibleUrl = sharedText.trim() 
+                // In a real scenario, you might want to use a regex to extract URL from a longer text
+                // For now, we assume the shared text IS the URL or contains it simply.
+                
+                urlEditText.setText(possibleUrl)
+                analyzeUrl(possibleUrl)
             }
         }
     }
