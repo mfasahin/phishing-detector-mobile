@@ -20,6 +20,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var detailSslTextView: TextView
     private lateinit var detailDomainTextView: TextView
     private lateinit var detailPatternTextView: TextView
+    
+    private var isResultShown = false
 
     private val scannerLauncher = registerForActivityResult(
         androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult()
@@ -28,6 +30,8 @@ class MainActivity : AppCompatActivity() {
             val scannedUrl = result.data?.getStringExtra("SCANNED_URL")
             if (!scannedUrl.isNullOrEmpty()) {
                 urlEditText.setText(scannedUrl)
+                // Switch to URL mode to show the input and hide the scan button
+                findViewById<com.google.android.material.button.MaterialButtonToggleGroup>(R.id.toggleGroup).check(R.id.btnUrlMode)
                 analyzeUrl(scannedUrl)
             }
         }
@@ -63,10 +67,22 @@ class MainActivity : AppCompatActivity() {
                     R.id.btnUrlMode -> {
                         urlInputLayout.visibility = android.view.View.VISIBLE
                         qrInputLayout.visibility = android.view.View.GONE
+                        
+                        if (isResultShown) {
+                             gaugeView.visibility = android.view.View.VISIBLE
+                             resultCardView.visibility = android.view.View.VISIBLE
+                        }
                     }
                     R.id.btnQrMode -> {
                         urlInputLayout.visibility = android.view.View.GONE
                         qrInputLayout.visibility = android.view.View.VISIBLE
+                        
+                        // Hide results in QR mode
+                        gaugeView.visibility = android.view.View.GONE
+                        resultCardView.visibility = android.view.View.GONE
+                        
+                        val intent = Intent(this, ScannerActivity::class.java)
+                        scannerLauncher.launch(intent)
                     }
                 }
             }
@@ -160,6 +176,8 @@ class MainActivity : AppCompatActivity() {
         
         // Optimize visibility and animation
         resultCardView.visibility = android.view.View.VISIBLE
+        isResultShown = true
+        
         resultCardView.alpha = 0f
         resultCardView.scaleX = 0.8f
         resultCardView.scaleY = 0.8f

@@ -36,6 +36,10 @@ class ScannerActivity : AppCompatActivity() {
         viewFinder = findViewById(R.id.viewFinder)
         cameraExecutor = Executors.newSingleThreadExecutor()
 
+        findViewById<android.widget.ImageButton>(R.id.btnClose).setOnClickListener {
+            finish()
+        }
+
         if (allPermissionsGranted()) {
             startCamera()
         } else {
