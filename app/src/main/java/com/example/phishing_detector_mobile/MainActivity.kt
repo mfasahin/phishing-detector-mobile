@@ -21,6 +21,18 @@ class MainActivity : AppCompatActivity() {
     private lateinit var detailDomainTextView: TextView
     private lateinit var detailPatternTextView: TextView
 
+    private val scannerLauncher = registerForActivityResult(
+        androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == RESULT_OK) {
+            val scannedUrl = result.data?.getStringExtra("SCANNED_URL")
+            if (!scannedUrl.isNullOrEmpty()) {
+                urlEditText.setText(scannedUrl)
+                analyzeUrl(scannedUrl)
+            }
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -38,6 +50,32 @@ class MainActivity : AppCompatActivity() {
         detailSslTextView = findViewById(R.id.detailSslTextView)
         detailDomainTextView = findViewById(R.id.detailDomainTextView)
         detailPatternTextView = findViewById(R.id.detailPatternTextView)
+
+        // Toggle Group Logic
+        val toggleGroup = findViewById<com.google.android.material.button.MaterialButtonToggleGroup>(R.id.toggleGroup)
+        val urlInputLayout = findViewById<android.view.ViewGroup>(R.id.urlInputLayout)
+        val qrInputLayout = findViewById<android.view.ViewGroup>(R.id.qrInputLayout)
+        val scanButtonMain = findViewById<com.google.android.material.button.MaterialButton>(R.id.scanButtonMain)
+
+        toggleGroup.addOnButtonCheckedListener { _, checkedId, isChecked ->
+            if (isChecked) {
+                when (checkedId) {
+                    R.id.btnUrlMode -> {
+                        urlInputLayout.visibility = android.view.View.VISIBLE
+                        qrInputLayout.visibility = android.view.View.GONE
+                    }
+                    R.id.btnQrMode -> {
+                        urlInputLayout.visibility = android.view.View.GONE
+                        qrInputLayout.visibility = android.view.View.VISIBLE
+                    }
+                }
+            }
+        }
+
+        scanButtonMain.setOnClickListener {
+            val intent = Intent(this, ScannerActivity::class.java)
+            scannerLauncher.launch(intent)
+        }
 
         checkButton.setOnClickListener {
             val url = urlEditText.text.toString().trim()
@@ -118,6 +156,7 @@ class MainActivity : AppCompatActivity() {
         
         // Update Gauge
         gaugeView.setScore(score)
+        gaugeView.visibility = android.view.View.VISIBLE
         
         // Optimize visibility and animation
         resultCardView.visibility = android.view.View.VISIBLE

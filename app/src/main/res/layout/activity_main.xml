@@ -37,43 +37,125 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <com.google.android.material.textfield.TextInputLayout
+        <!-- Toggle Group -->
+        <com.google.android.material.button.MaterialButtonToggleGroup
+            android:id="@+id/toggleGroup"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginBottom="24dp"
+            app:singleSelection="true"
+            app:selectionRequired="true"
+            app:checkedButton="@id/btnUrlMode">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnUrlMode"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="URL"
+                android:textColor="#FFFFFF"
+                app:backgroundTint="@color/selector_toggle_bg"
+                app:strokeColor="#33FFFFFF" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnQrMode"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="QR SCAN"
+                android:textColor="#FFFFFF"
+                app:backgroundTint="@color/selector_toggle_bg"
+                app:strokeColor="#33FFFFFF" />
+        </com.google.android.material.button.MaterialButtonToggleGroup>
+
+        <!-- URL Input Layout -->
+        <LinearLayout
+            android:id="@+id/urlInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Web Sitesi Adresi Girin"
-            android:textColorHint="#99FFFFFF"
-            app:hintTextColor="#FFFFFF"
-            app:boxStrokeWidth="0dp"
-            app:boxBackgroundColor="@android:color/transparent"
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox">
+            android:orientation="vertical"
+            android:visibility="visible">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/urlEditText"
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:textColor="#FFFFFF"
-                android:maxLines="1"
-                android:inputType="textUri" />
-            
-            <View
+                android:hint="Web Sitesi Adresi Girin"
+                android:textColorHint="#99FFFFFF"
+                app:hintTextColor="#FFFFFF"
+                app:boxStrokeWidth="0dp"
+                app:boxBackgroundColor="@android:color/transparent"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/urlEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:textColor="#FFFFFF"
+                    android:maxLines="1"
+                    android:inputType="textUri" />
+                
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#44FFFFFF" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/checkButton"
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#44FFFFFF" />
+                android:layout_height="56dp"
+                android:layout_marginTop="24dp"
+                android:text="RİSK ANALİZİ YAP"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="#FFFFFF"
+                android:background="@drawable/bg_button_red"
+                app:backgroundTint="@null" />
+        </LinearLayout>
 
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/checkButton"
+        <!-- QR Scan Layout -->
+        <LinearLayout
+            android:id="@+id/qrInputLayout"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_marginTop="24dp"
-            android:text="RİSK ANALİZİ YAP"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:textColor="#FFFFFF"
-            android:background="@drawable/bg_button_red"
-            app:backgroundTint="@null" />
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:src="@drawable/ic_security_shield" 
+                app:tint="#FFFFFF"
+                android:alpha="0.8"
+                android:layout_marginBottom="16dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Kamerayı Kullanarak Tara"
+                android:textColor="#CCCCCC"
+                android:textSize="14sp"
+                android:layout_marginBottom="24dp"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/scanButtonMain"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:text="KAMERAYI AÇ"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="#FFFFFF"
+                android:background="@drawable/bg_button_red"
+                app:backgroundTint="@null"
+                app:icon="@drawable/ic_security_shield"
+                app:iconGravity="textStart"
+                app:iconTint="#FFFFFF"/>
+        </LinearLayout>
 
     </LinearLayout>
 
@@ -82,6 +164,7 @@
         android:layout_width="260dp"
         android:layout_height="260dp"
         android:layout_marginBottom="48dp"
+        android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/resultCardView"
         app:layout_constraintTop_toBottomOf="@id/inputContainer"
         app:layout_constraintStart_toStartOf="parent"
